@@ -1,5 +1,56 @@
-// this one is cracked
+//v1
 #include <bits/stdc++.h>
+#define ll long long
+#define ull unsigned long long
+#define THE_MAX numeric_limits<unsigned long long>::max()
+#define THE_MIN numeric_limits<long long>::min()
+using namespace std;
+int peaceful_queens(vector<int>& v){
+    for (int i = 0; i < v.size(); i++){
+        for (int j = i + 1; j < v.size(); j++){
+            if (abs(v[j] - v[i]) == abs(j - i)) return 0;
+        }
+    }
+    return 1;
+}
+void recA(vector<int>& v, set<pair<int, int> >& myset,
+          unordered_set<int>& restricted_j, int row, int& cnt){
+    if (row == 8){
+        cnt += peaceful_queens(v);
+        return;
+    }
+ 
+    for (int j = 0; j < 8; j++){
+        if (myset.find({row, j}) != myset.end())continue;
+        if (restricted_j.find(j) != restricted_j.end())continue;
+        v[row] = j;
+        restricted_j.insert(j);
+        recA(v, myset, restricted_j, row + 1, cnt);
+        restricted_j.erase(j);
+    }
+}
+int main ()
+{
+    unordered_set<int> restricted_j;
+    set<pair<int, int> > myset;
+    string s;
+    for (int i = 0; i < 8; i++){
+        cin >> s;
+        for (int j = 0; j < 8; j++){
+            if (s[j] == '*'){
+                myset.insert({i, j});
+            }
+        }
+    }
+    vector<int> v(8, 0);
+    int cnt = 0;
+    recA(v, myset, restricted_j, 0, cnt);
+    cout << cnt;
+    return 0;
+}
+
+// v2
+/*#include <bits/stdc++.h>
 #define ll long long
 #define ull unsigned long long
 #define THE_MAX numeric_limits<unsigned long long>::max()
@@ -89,3 +140,4 @@ int main()
     cout << cnt;
     return 0;
 }
+*/
